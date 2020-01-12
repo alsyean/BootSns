@@ -11,7 +11,9 @@ $(document).ready(function(){
         },
         url: "/post"
     }).then(function(data) {
+        console.log("getPost date : " +data.data);
     	$.each(data.data, function(index, e) {
+    		
     		$('#posts').append(
     				'<div class="card mb-4"> <div class="card-body"> <h2 class="card-title">' + e.title 
     				+ '</h2> <p class="card-text">' + e.content 
@@ -21,7 +23,7 @@ $(document).ready(function(){
     				+ ' by ' + e.user.username + getFollowInfo(e.user)
     				+ '</div> </div>');
     	});
-       console.log(data);
+       console.log("getPost date : " +data);
        console.log("e.user : "+e.user);
     }, function(err) {
     	console.log(err.responseJSON);
@@ -47,6 +49,9 @@ $(document).ready(function(){
 	        },
 	        url: "/post/feed"
 	    }).then(function(data) {
+
+		    console.log("postFeed" + data.data);
+		    
 	    	console.log("token : " + token);
 	    	$.each(data.data, function(index, e) {
 	    		$('#myfeed').append(

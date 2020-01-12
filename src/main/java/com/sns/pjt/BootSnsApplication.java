@@ -10,4 +10,5 @@ public class BootSnsApplication {
 		SpringApplication.run(BootSnsApplication.class, args);
 	}
 
-}
+} 
+ 

@@ -13,6 +13,7 @@ public class ResultDto {
 	private String message;
 	private Object data;
 	
+	
 	public ResultDto(String message) {
 		this.message = message;
 	}
@@ -22,5 +23,5 @@ public class ResultDto {
 		this.message = message;
 		this.data = data;
 	}
-
+	
 }

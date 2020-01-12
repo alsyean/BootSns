@@ -24,13 +24,13 @@ public class UserServiceImpl implements UserService {
 	private TokenRepository tokenRepository;
 
 	public User insertUser(User user) {
-
-		return userRepository.save(user);
+ 
+		return userRepository.save(user); 
 	}
 
-	public List<User> getUserById(int id) {
+	public User getUserById(int id) {
 
-		return (List<User>) userRepository.findById(id);
+		return userRepository.findById(id);
 	}
 
 	@Override

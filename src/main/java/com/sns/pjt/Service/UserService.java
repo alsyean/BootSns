@@ -15,7 +15,7 @@ public interface UserService {
 	
 	public User insertUser(User user);
 	
-	public List<User> getUserById(int id);
+	public User getUserById(int id);
 	
 	 User getUserInfoByUsernameAndPassword(User user); 
 	

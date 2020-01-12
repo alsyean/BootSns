@@ -47,7 +47,7 @@ public class UserRestController {
 		}
 
 		return resultDto;
-	}
+	} 
 
 	// 로그인 기능
 
@@ -86,7 +86,7 @@ public class UserRestController {
 		ResultDto resultDto = new ResultDto(400, "Fail", null);
 
 		try {
-			List<User> result = userService.getUserById(user.getId());
+			User result = userService.getUserById(user.getId());
 
 			if (result != null) {
 
