@@ -119,12 +119,12 @@ public class PostTest {
 
 		
 
-		Iterator<Post> postSet = postList.iterator();
+		Iterator<Post> postIterator = postList.iterator();
 
 		if (nextPostList.isEmpty()) {
-			while (postSet.hasNext()) {
+			while (postIterator.hasNext()) {
 
-				Post post = postSet.next();
+				Post post = postIterator.next();
 				postList.set(postList.indexOf(post), post).setPageCheck(true);
 				System.out.println("post : " + postList.toString());
 			}
@@ -215,20 +215,20 @@ public class PostTest {
 
 		if (follow.size() > 0) {
 
-			Iterator<Post> postSet = postList.iterator();
-			Iterator<Follow> followSet = follow.iterator();
+			Iterator<Post> postIterator = postList.iterator();
+			Iterator<Follow> followIterator = follow.iterator();
 
-			while (postSet.hasNext()) {
+			while (postIterator.hasNext()) {
 
-				Post post = postSet.next();
+				Post post = postIterator.next();
 
 				Object uId = post.getUser().getId();
 
 				System.out.println("postListIndex : " + postList.indexOf(post));
 
-//				while (followSet.hasNext()) {
+//				while (followIterator.hasNext()) {
 				for (int i = 0; i < follow.size(); i++) {
-//					Follow follower = followSet.next();
+//					Follow follower = followIterator.next();
 
 //					Object followerId = follow.get(follow.indexOf(follower)).getFollowerId();
 //					Object followeeId = follow.get(follow.indexOf(follower)).getFolloweeId();
@@ -258,24 +258,24 @@ public class PostTest {
 				}
 
 				if (!post.getUser().getIsFollow()) {
-					postSet.remove();
+					postIterator.remove();
 				}
 
 			}
 
 		} else if (follow.size() == 0) {
 
-			Iterator<Post> postSet = postList.iterator();
+			Iterator<Post> postIterator = postList.iterator();
 
-			while (postSet.hasNext()) {
+			while (postIterator.hasNext()) {
 
-				Post post = postSet.next();
+				Post post = postIterator.next();
 
 				Object uId = post.getUser().getId();
 
 				if (!uId.equals(users.getId())) {
 					System.out.println("delete : " + post);
-					postSet.remove();
+					postIterator.remove();
 				}
 
 			}
@@ -302,12 +302,12 @@ public class PostTest {
 		System.out.println("@!!!!!!!!!@@");
 		System.out.println(followPost.toString());
 
-		Iterator<Post> followSet = followPost.iterator();
+		Iterator<Post> followIterator = followPost.iterator();
 
 		if (postList.size() <= pageSize) {
-			while (followSet.hasNext()) {
+			while (followIterator.hasNext()) {
 
-				Post fpost = followSet.next();
+				Post fpost = followIterator.next();
 
 				followPost.set(followPost.indexOf(fpost), fpost).setPageCheck(true);
 			}
@@ -340,12 +340,12 @@ public class PostTest {
 
 		if (follow.size() > 0) {
 
-			Iterator<Post> postSet = postList.iterator();
-			Iterator<Follow> followSet = follow.iterator();
+			Iterator<Post> postIterator = postList.iterator();
+			Iterator<Follow> followIterator = follow.iterator();
 
-			while (postSet.hasNext()) {
+			while (postIterator.hasNext()) {
 
-				Post post = postSet.next();
+				Post post = postIterator.next();
 
 				Object uId = post.getUser().getId();
 
@@ -381,11 +381,11 @@ public class PostTest {
 
 		} else if (follow.size() == 0) {
 
-			Iterator<Post> postSet = postList.iterator();
+			Iterator<Post> postIterator = postList.iterator();
 
-			while (postSet.hasNext()) {
+			while (postIterator.hasNext()) {
 
-				Post post = postSet.next();
+				Post post = postIterator.next();
 
 				Object uId = post.getUser().getId();
 

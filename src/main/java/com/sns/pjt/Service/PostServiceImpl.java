@@ -62,16 +62,16 @@ public class PostServiceImpl implements PostService {
 
 		if (follow.size() > 0) {
 
-			Iterator<Post> postSet = postList.iterator();
+			Iterator<Post> postIterator = postList.iterator();
 
-			while (postSet.hasNext()) {
+			while (postIterator.hasNext()) {
 
-				Post post = postSet.next();
+				Post post = postIterator.next();
 				Object uId = post.getUser().getId();
 
 				for (int i = 0; i < follow.size(); i++) {
 
-					// Follow follower = followSet.next();
+					// Follow follower = followIterator.next();
 
 					Object followerId = follow.get(i).getFollowerId();
 					Object followeeId = follow.get(i).getFolloweeId();
@@ -90,22 +90,22 @@ public class PostServiceImpl implements PostService {
 				}
 
 				if (!post.getUser().getIsFollow()) {
-					postSet.remove();
+					postIterator.remove();
 				}
 			}
 
 		} else if (follow.size() == 0) {
 
-			Iterator<Post> postSet = postList.iterator();
+			Iterator<Post> postIterator = postList.iterator();
 
-			while (postSet.hasNext()) {
+			while (postIterator.hasNext()) {
 
-				Post post = postSet.next();
+				Post post = postIterator.next();
 
 				Object uId = post.getUser().getId();
 
 				if (!uId.equals(userId)) {
-					postSet.remove();
+					postIterator.remove();
 				}
 
 			}
@@ -128,20 +128,20 @@ public class PostServiceImpl implements PostService {
 			followPost.add(post);
 		}
 
-		Iterator<Post> followSet = followPost.iterator();
+		Iterator<Post> followIterator = followPost.iterator();
 
 		logger.info("fisrtPage :" + fisrtPage + ", pageSize : " + lastPage);
 
 		if (postList.size() <= lastPage || postList.size() == follow.size()) {
-			while (followSet.hasNext()) {
+			while (followIterator.hasNext()) {
 
-				Post fpost = followSet.next();
+				Post fpost = followIterator.next();
 
 				followPost.set(followPost.indexOf(fpost), fpost).setPageCheck(true);
 			}
 		}
 
-		logger.info("return postList : " + followSet.toString());
+		logger.info("return postList : " + followIterator.toString());
 
 		return followPost;
 
@@ -168,12 +168,12 @@ public class PostServiceImpl implements PostService {
 
 			nextPostList = postRepository.findAllByOrderByIdDesc(nextPage);
 
-			Iterator<Post> postSet = postList.iterator();
+			Iterator<Post> postIterator = postList.iterator();
 
 			if (nextPostList.isEmpty()) {
-				while (postSet.hasNext()) {
+				while (postIterator.hasNext()) {
 
-					Post post = postSet.next();
+					Post post = postIterator.next();
 					postList.set(postList.indexOf(post), post).setPageCheck(true);
 
 				}
@@ -188,11 +188,11 @@ public class PostServiceImpl implements PostService {
 			List<Follow> follow = followService.getFollowerAndFollowee(session);
 
 			if (follow.size() > 0) {
-				Iterator<Post> postSet = postList.iterator();
+				Iterator<Post> postIterator = postList.iterator();
 
-				while (postSet.hasNext()) {
+				while (postIterator.hasNext()) {
 
-					Post post = postSet.next();
+					Post post = postIterator.next();
 					Object uId = post.getUser().getId();
 
 					for (int i = 0; i < follow.size(); i++) {
@@ -216,11 +216,11 @@ public class PostServiceImpl implements PostService {
 				}
 
 			} else if (follow.size() == 0) {
-				Iterator<Post> postSet = postList.iterator();
+				Iterator<Post> postIterator = postList.iterator();
 
-				while (postSet.hasNext()) {
+				while (postIterator.hasNext()) {
 
-					Post post = postSet.next();
+					Post post = postIterator.next();
 
 					Object uId = post.getUser().getId();
 
