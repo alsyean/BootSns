@@ -1,3 +1,4 @@
+
 package com.sns.pjt.Controller;
 
 import java.util.List;
@@ -45,16 +46,20 @@ public class PostRestController {
 		return resultDto;
 	}
 
-	@GetMapping(value = "/post", produces = "application/json; charset=utf-8")
-	public ResultDto getPostList(HttpSession session) throws Exception {
+	@GetMapping(value = "/postAll/{AllPostPage}", produces = "application/json; charset=utf-8")
+	public ResultDto getPostList(@PathVariable("AllPostPage") int AllPostPage, HttpSession session) throws Exception {
 
+		logger.info("Allpage : " + AllPostPage);
+		
 		ResultDto resultDto = new ResultDto(400, "Fail", null);
 
 		try {
 
-			List<Post> postList = postService.getPostList(session);
+			List<Post> postList = postService.getPostList(session, AllPostPage);
 
 			resultDto = new ResultDto(200, "Succeess", postList);
+			
+			logger.info("postList : " + postList);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,14 +68,16 @@ public class PostRestController {
 		return resultDto;
 	}
 
-	@GetMapping(value = "/post/feed", produces = "application/json; charset=utf-8")
-	public ResultDto getPostFeedList(HttpSession session) throws Exception {
+	@GetMapping(value = "/post/feed/{feedPage}", produces = "application/json; charset=utf-8")
+	public ResultDto getPostFeedList(@PathVariable("feedPage")int feedPage,HttpSession session) throws Exception {
 
+		logger.info("feedpage : " + feedPage);
+		
 		ResultDto resultDto = new ResultDto(400, "Fail", null);
 
 		try {
 
-			List<Post> postList = postService.getFollowPost(session);
+			List<Post> postList = postService.getFollowPost(session,feedPage);
 
 			resultDto = new ResultDto(200, "Succeess", postList);
 

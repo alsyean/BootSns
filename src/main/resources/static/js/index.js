@@ -1,4 +1,6 @@
 $(document).ready(function(){
+
+	let AllPostPage = 0;
 	
 	var token;
 	if(document.cookie.includes("accesstoken")) {
@@ -6,14 +8,18 @@ $(document).ready(function(){
 	}
 	
 	$.ajax({
-		beforeSend: function(xhr){
-			xhr.setRequestHeader('accesstoken', token);
-        },
-        url: "/post"
+	
+        url: "/postAll/" + AllPostPage
     }).then(function(data) {
         console.log("getPost date : " +data.data);
     	$.each(data.data, function(index, e) {
+
+    		console.log("data : " + e.pageCheck);
     		
+	 	       if(e.pageCheck){
+	 	    	   $('#postAllMoreBtn').remove();
+	 	       }
+	 	       
     		$('#posts').append(
     				'<div class="card mb-4"> <div class="card-body"> <h2 class="card-title">' + e.title 
     				+ '</h2> <p class="card-text">' + e.content 
@@ -47,13 +53,16 @@ $(document).ready(function(){
 			beforeSend: function(xhr){
 				xhr.setRequestHeader('accesstoken', token);
 	        },
-	        url: "/post/feed"
+	        url: "/post/feed/0"
 	    }).then(function(data) {
 
 		    console.log("postFeed" + data.data);
 		    
 	    	console.log("token : " + token);
 	    	$.each(data.data, function(index, e) {
+	    		  if(e.pageCheck){
+		 	    	   $('#postFeedMoreBtn').remove();
+		 	       }
 	    		$('#myfeed').append(
 	    				'<div class="card mb-4"> <div class="card-body"> <h2 class="card-title">' + e.title 
 	    				+ '</h2> <p class="card-text">' + e.content 
@@ -156,4 +165,98 @@ $(document).ready(function(){
 	    });
 	});
 	
+
+	$('#postAllMoreBtn').on('click', function() {
+		
+		let postMore =  $('#postAllMoreBtn').val();
+		
+		AllPostPage  =  AllPostPage + parseInt(postMore) ;
+		
+		console.log(AllPostPage);
+		
+		$.ajax({
+			
+	        url: "/postAll/" + AllPostPage
+	    }).then(function(data) {
+	        console.log("getPost date : " +data.data);
+	    	$.each(data.data, function(index, e) {
+
+	 	       console.log("getPost : " + e.pageCheck);
+	 	       
+	 	       if(e.pageCheck){
+	 	    	   $('#postAllMoreBtn').remove();
+	 	       }
+	 	       
+	    		$('#posts').append(
+	    				'<div class="card mb-4"> <div class="card-body"> <h2 class="card-title">' + e.title 
+	    				+ '</h2> <p class="card-text">' + e.content 
+	    				+ '</p> <a href="/post/detail/' + e.id 
+	    				+ '" class="btn btn-primary">Read More &rarr;</a> </div> ' 
+	    				+ '<div class="card-footer text-muted"> Posted on ' + e.createdAt.split('T')[0]
+	    				+ ' by ' + e.user.username + getFollowInfo(e.user)
+	    				+ '</div> </div>');
+	    	});
+	       console.log("getPost date : " +data);
+	       console.log("e.user : "+e.user);
+	    }, function(err) {
+	    	console.log(err.responseJSON);
+	    });
+	})
+
+	let feedPage = 0;
+	
+	$('#postFeedMoreBtn').on('click', function() {
+		
+		let postMore =  $('#postFeedMoreBtn').val();
+		
+		feedPage  =  feedPage + parseInt(postMore) ;
+		
+		console.log(feedPage);
+		
+		$.ajax({
+			
+	        url: "/post/feed/" + feedPage
+	    }).then(function(data) {
+	        console.log("getPost date : " +data.data);
+	    	$.each(data.data, function(index, e) {
+
+	 	       console.log("getPost : " + e.pageCheck);
+	 	       
+	 	       if(e.pageCheck){
+	 	    	   $('#postFeedMoreBtn').remove();
+	 	       }
+	 	       
+	 	      $('#myfeed').append(
+	    				'<div class="card mb-4"> <div class="card-body"> <h2 class="card-title">' + e.title 
+	    				+ '</h2> <p class="card-text">' + e.content 
+	    				+ '</p> <a href="/post/detail/' + e.id 
+	    				+ '" class="btn btn-primary">Read More &rarr;</a> </div> ' 
+	    				+ '<div class="card-footer text-muted"> Posted on ' + e.createdAt.split('T')[0]
+	    				+ ' by ' + e.user.username + getFollowInfo(e.user)
+	    				+ '</div> </div>');
+	    	});
+	       console.log("getPost date : " +data);
+	       console.log("e.user : "+e.user);
+	    }, function(err) {
+	    	console.log(err.responseJSON);
+	    });
+	})
+	
+	
+	if(token){
+		$('#postAllMoreBtn').hide();
+	}
+	
+	
+	$('#myfeedBtn').on('click', function() {
+		$('#postAllMoreBtn').hide();
+		$('#postFeedMoreBtn').show();
+	})
+	
+	$('#postBtn').on('click', function() {
+		$('#postFeedMoreBtn').hide();
+		$('#postAllMoreBtn').show();
+	})
+	
 });
+

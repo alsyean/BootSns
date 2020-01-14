@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -19,7 +20,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
 	List<Post> findByUserIdOrderByIdDesc(int userId);
 
-	List<Post> findAllByOrderByIdDesc();
+	List<Post> findAllByOrderByIdDesc(Pageable paging);
 
 	Post findById(int postId);
 
@@ -29,8 +30,11 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 	int deletePost(@Param("id") int postId);
 
 	@Query(value = "select u.id as user_id , u.username, u.created_at , p.*, IF(p.user_id  = :userId ,null,1) "
-					+ " from user u join post p on u.id = p.user_id "
-					+ "order by p.id desc", nativeQuery = true)
-	public List<Post> followPost(@Param("userId") int userId);
+			+ " from user u join post p on u.id = p.user_id " + "order by p.id desc", nativeQuery = true)
+	public List<Post> allPost(@Param("userId") int userId, Pageable paging);
 
+	@Query(value = "select u.id as user_id , u.username, u.created_at , p.*, IF(p.user_id  = :userId ,null,1) "
+			+ " from user u join post p on u.id = p.user_id " + "order by p.id desc", nativeQuery = true)
+	public List<Post> followPost(@Param("userId") int userId);
+	
 }

@@ -1,5 +1,7 @@
+
 package com.sns.pjt.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -9,6 +11,9 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.sns.pjt.Controller.PostRestController;
@@ -32,8 +37,6 @@ public class PostServiceImpl implements PostService {
 	@Autowired
 	private FollowService followService;
 
-	User user = new User();
-
 	@Override
 	public Post insertPost(Post post, HttpSession session) {
 
@@ -48,9 +51,11 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<Post> getFollowPost(HttpSession session) {
+	public List<Post> getFollowPost(HttpSession session, int feedPage) {
 
 		Object userId = session.getAttribute("userId");
+
+		int pageSize = 5;
 
 		List<Post> postList = postRepository.followPost((int) userId);
 		List<Follow> follow = followService.getFollowerAndFollowee(session);
@@ -58,7 +63,6 @@ public class PostServiceImpl implements PostService {
 		if (follow.size() > 0) {
 
 			Iterator<Post> postSet = postList.iterator();
-			Iterator<Follow> followSet = follow.iterator();
 
 			while (postSet.hasNext()) {
 
@@ -75,18 +79,17 @@ public class PostServiceImpl implements PostService {
 					if (followerId.equals(userId) && followeeId.equals(uId)) {
 						postList.set(postList.indexOf(post), post).getUser().setIsFollow(true);
 						break;
-					}else if (!uId.equals(userId)) {
+					} else if (!uId.equals(userId)) {
 						postList.set(postList.indexOf(post), post).getUser().setIsFollow(false);
-						System.out.println("modify : " + post);
 					}
 
 				}
-				
-				if(post.getUser().getIsFollow() == null) {
+
+				if (post.getUser().getIsFollow() == null) {
 					continue;
 				}
-				
-				if(!post.getUser().getIsFollow()) {
+
+				if (!post.getUser().getIsFollow()) {
 					postSet.remove();
 				}
 			}
@@ -108,32 +111,84 @@ public class PostServiceImpl implements PostService {
 			}
 		}
 
-		logger.info("return postList : " + postList.toString());
+		List<Post> followPost = new ArrayList<Post>();
 
-		return postList;
+		int fisrtPage = feedPage;
+		int lastPage = feedPage + pageSize;
+
+		System.out.println("");
+
+		if (postList.size() < lastPage) {
+			lastPage = postList.size();
+
+		}
+
+		for (; fisrtPage < lastPage; fisrtPage++) {
+			Post post = postList.get(fisrtPage);
+			followPost.add(post);
+		}
+
+		Iterator<Post> followSet = followPost.iterator();
+
+		logger.info("fisrtPage :" + fisrtPage + ", pageSize : " + lastPage);
+
+		if (postList.size() <= lastPage || postList.size() == follow.size()) {
+			while (followSet.hasNext()) {
+
+				Post fpost = followSet.next();
+
+				followPost.set(followPost.indexOf(fpost), fpost).setPageCheck(true);
+			}
+		}
+
+		logger.info("return postList : " + followSet.toString());
+
+		return followPost;
 
 	}
 
 	@Override
-	public List<Post> getPostList(HttpSession session) {
+	public List<Post> getPostList(HttpSession session, int AllPostPage) {
 
 		Object userId = session.getAttribute("userId");
 
+		int pageSize = 5;
+
 		List<Post> postList = null;
 
+		List<Post> nextPostList = null;
+
+		Pageable paging = PageRequest.of(AllPostPage, pageSize, Sort.Direction.DESC, "id");
+
+		Pageable nextPage = PageRequest.of(AllPostPage + 1, pageSize, Sort.Direction.DESC, "id");
+
 		if (userId == null) {
-			
-			postList = (List<Post>) postRepository.findAllByOrderByIdDesc();
-			
+
+			postList = postRepository.findAllByOrderByIdDesc(paging);
+
+			nextPostList = postRepository.findAllByOrderByIdDesc(nextPage);
+
+			Iterator<Post> postSet = postList.iterator();
+
+			if (nextPostList.isEmpty()) {
+				while (postSet.hasNext()) {
+
+					Post post = postSet.next();
+					postList.set(postList.indexOf(post), post).setPageCheck(true);
+
+				}
+			}
+
 		} else {
 
-			postList = postRepository.followPost((int) userId);
+			nextPostList = postRepository.allPost((int) userId, nextPage);
+
+			postList = postRepository.allPost((int) userId, paging);
+
 			List<Follow> follow = followService.getFollowerAndFollowee(session);
 
 			if (follow.size() > 0) {
-
 				Iterator<Post> postSet = postList.iterator();
-				Iterator<Follow> followSet = follow.iterator();
 
 				while (postSet.hasNext()) {
 
@@ -148,15 +203,19 @@ public class PostServiceImpl implements PostService {
 						if (followerId.equals(userId) && followeeId.equals(uId)) {
 							postList.set(postList.indexOf(post), post).getUser().setIsFollow(true);
 							break;
-						}else if (!uId.equals(userId)) {
+						} else if (!uId.equals(userId)) {
 							postList.set(postList.indexOf(post), post).getUser().setIsFollow(false);
 						}
 
 					}
+
+					if (nextPostList.isEmpty()) {
+						postList.set(postList.indexOf(post), post).setPageCheck(true);
+					}
+
 				}
 
 			} else if (follow.size() == 0) {
-
 				Iterator<Post> postSet = postList.iterator();
 
 				while (postSet.hasNext()) {
@@ -169,6 +228,9 @@ public class PostServiceImpl implements PostService {
 						postList.set(postList.indexOf(post), post).getUser().setIsFollow(false);
 					}
 
+					if (nextPostList.isEmpty()) {
+						postList.set(postList.indexOf(post), post).setPageCheck(true);
+					}
 				}
 			}
 		}
@@ -191,6 +253,7 @@ public class PostServiceImpl implements PostService {
 
 			updatePost.setTitle(post.getTitle());
 			updatePost.setContent(post.getContent());
+			updatePost.setCreatedAt(new Date());
 
 			postRepository.save(updatePost);
 		}

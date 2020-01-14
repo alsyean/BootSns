@@ -16,6 +16,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.mock.web.MockHttpSession;
@@ -104,17 +107,32 @@ public class PostTest {
 	}
 
 	@Test
-	@Ignore
 	public void testPostList() {
 
-		List<Post> post = (List<Post>) postRepository.findAllByOrderByIdDesc();
+		Pageable paging = PageRequest.of(0, 5, Sort.Direction.DESC, "id");
 
-		for (Post list : post) {
+		List<Post> postList = (List<Post>) postRepository.findAllByOrderByIdDesc(paging);
+
+		Pageable nextPage = PageRequest.of(1, 5, Sort.Direction.DESC, "id");
+
+		List<Post> nextPostList = postRepository.findAllByOrderByIdDesc(nextPage);
+
+		
+
+		Iterator<Post> postSet = postList.iterator();
+
+		if (nextPostList.isEmpty()) {
+			while (postSet.hasNext()) {
+
+				Post post = postSet.next();
+				postList.set(postList.indexOf(post), post).setPageCheck(true);
+				System.out.println("post : " + postList.toString());
+			}
+		}
+		for (Post list : postList) {
 
 			System.out.println("list : " + list.toString());
 		}
-
-		System.out.println("post : " + post.toString());
 
 	}
 
@@ -180,6 +198,7 @@ public class PostTest {
 	 */
 
 	@Test
+	@Ignore
 	public void testFeedPost() {
 
 		User users = userService.getUserById(1);
@@ -187,6 +206,8 @@ public class PostTest {
 		List<Post> postList = postRepository.followPost(users.getId());
 
 		List<Follow> follow = followRepository.getFollowerAndFollowee(users.getId());
+
+		int lastIndex = 0;
 
 		System.out.println("follow size : " + follow);
 		System.out.println("post size : " + postList.size());
@@ -220,24 +241,26 @@ public class PostTest {
 					System.out.println("uId : " + uId);
 					System.out.println("users : " + users.getId());
 
+					lastIndex = post.getId();
+
 					if (followerId.equals(users.getId()) && followeeId.equals(uId)) {
 						postList.set(postList.indexOf(post), post).getUser().setIsFollow(true);
 						break;
-					}else if (!uId.equals(users.getId())) {
+					} else if (!uId.equals(users.getId())) {
 						postList.set(postList.indexOf(post), post).getUser().setIsFollow(false);
 						System.out.println("modify : " + post);
 					}
 
 				}
-				
-				if(post.getUser().getIsFollow() == null) {
+
+				if (post.getUser().getIsFollow() == null) {
 					continue;
 				}
-				
-				if(!post.getUser().getIsFollow()) {
+
+				if (!post.getUser().getIsFollow()) {
 					postSet.remove();
 				}
-				
+
 			}
 
 		} else if (follow.size() == 0) {
@@ -258,8 +281,40 @@ public class PostTest {
 			}
 		}
 
+		List<Post> followPost = new ArrayList<Post>();
+
 		System.out.println("#######################");
 		System.out.println(postList.toString());
+
+		int fisrtPage = 4;
+		int pageSize = 6;
+
+		if (postList.size() < pageSize) {
+			pageSize = postList.size();
+
+		}
+
+		for (; fisrtPage < pageSize; fisrtPage++) {
+			Post post = postList.get(fisrtPage);
+			followPost.add(post);
+		}
+
+		System.out.println("@!!!!!!!!!@@");
+		System.out.println(followPost.toString());
+
+		Iterator<Post> followSet = followPost.iterator();
+
+		if (postList.size() <= pageSize) {
+			while (followSet.hasNext()) {
+
+				Post fpost = followSet.next();
+
+				followPost.set(followPost.indexOf(fpost), fpost).setPageCheck(true);
+			}
+		}
+
+		System.out.println("@@@@@@@@@@@@@@@@@");
+		System.out.println(followPost.toString());
 
 	}
 
@@ -269,9 +324,15 @@ public class PostTest {
 
 		User users = userService.getUserById(1);
 
-		List<Post> postList = postRepository.followPost(users.getId());
+		Pageable paging = PageRequest.of(0, 5, Sort.Direction.DESC, "id");
+
+		List<Post> postList = postRepository.allPost(users.getId(), paging);
 
 		List<Follow> follow = followRepository.getFollowerAndFollowee(users.getId());
+
+		Pageable nextPage = PageRequest.of(1, 5, Sort.Direction.DESC, "id");
+
+		List<Post> nextPostList = postRepository.allPost(users.getId(), nextPage);
 
 		System.out.println("follow size : " + follow);
 		System.out.println("post size : " + postList.size());
@@ -302,10 +363,15 @@ public class PostTest {
 					System.out.println("fId : " + users.getId());
 					System.out.println();
 
+					if (paging.next().getPageNumber() > paging.getPageSize() || nextPostList.isEmpty()) {
+						System.out.println("#size#");
+						postList.set(postList.indexOf(post), post).setPageCheck(true);
+					}
+
 					if (followerId.equals(users.getId()) && followeeId.equals(uId)) {
 						postList.set(postList.indexOf(post), post).getUser().setIsFollow(true);
 						break;
-					}else if (!uId.equals(users.getId())) {
+					} else if (!uId.equals(users.getId())) {
 						postList.set(postList.indexOf(post), post).getUser().setIsFollow(false);
 						System.out.println("modify : " + post);
 					}
@@ -323,12 +389,24 @@ public class PostTest {
 
 				Object uId = post.getUser().getId();
 
+				if (paging.next().getPageNumber() > paging.getPageSize() || nextPostList.isEmpty()) {
+					System.out.println("#size#");
+					postList.set(postList.indexOf(post), post).setPageCheck(true);
+				}
+
 				if (!uId.equals(users.getId())) {
 					postList.set(postList.indexOf(post), post).getUser().setIsFollow(false);
 				}
 
 			}
 		}
+
+		System.out.println(paging.hasPrevious());
+		System.out.println(paging.getPageSize());
+		System.out.println(paging.next().getPageNumber());
+		System.out.println(paging.getPageNumber());
+		System.out.println(paging.first());
+		System.out.println(paging.previousOrFirst());
 
 		System.out.println("#######################");
 		System.out.println(postList.toString());

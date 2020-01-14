@@ -1,3 +1,4 @@
+
 package com.sns.pjt.Service;
 
 import java.util.List;
@@ -16,9 +17,9 @@ public interface PostService {
 
 	public Post insertPost(Post post, HttpSession session);
 
-	public List<Post> getPostList(HttpSession session);
+	public List<Post> getPostList(HttpSession session, int AllPostPage);
 
-	public List<Post> getFollowPost(HttpSession session);
+	public List<Post> getFollowPost(HttpSession session, int feedPage);
 
 	public Post updatePost(Post post, HttpSession session);
 

@@ -32,40 +32,53 @@ body {
 	<#include "header.ftl">
 
 	<div class="container">
-	
+
 		<#if Session.userId??>
-			<div class="my-5"></div>
-			<ul class="nav nav-tabs">
-				 <li class="nav-item">
-				 	<a class="nav-link active" data-toggle="tab" href="#myfeed">My Feed</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" data-toggle="tab" href="#posts">All Posts</a>
-				</li>
-			</ul>
-			
-				<div class="col-md-2"></div>
-				
-				<div class="tab-content">
-					<div class="col-md-2"></div>
-					<div class="container tab-pane active col-md-8" id="myfeed">
-						<h1 class="my-4"></h1>
-					</div>
-					<div class="container tab-pane fade col-md-8" id="posts">
-						<h1 class="my-4"></h1>
-					</div>
-				</div>
-		<#else>
-			<div class="row">
-				<div class="col-md-2"></div>
-				<div class="col-md-8" id="posts">
-					<h1 class="my-4"></h1>
-				</div>
+		<div class="my-5"></div>
+		<ul class="nav nav-tabs">
+			<li class="nav-item"><a class="nav-link active"
+				data-toggle="tab" href="#myfeed" id = "myfeedBtn">My Feed</a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="tab" id = "postBtn"
+				href="#posts">All Posts</a></li>
+		</ul>
+
+		<div class="col-md-2"></div>
+
+		<div class="tab-content">
+			<div class="col-md-2"></div>
+			<div class="container tab-pane active col-md-8" id="myfeed" >
+				<h1 class="my-4"></h1>
 			</div>
-		</#if>
+			<div class="container tab-pane fade col-md-8" id="posts" >
+				<h1 class="my-4"></h1>
+			</div>
+			<div class="text-center">
+
+				<button type="button" class="btn btn-light" id ="postAllMoreBtn" value="1">더 보기</button>
+
+				<button type="button" class="btn btn-outline-dark" id="postFeedMoreBtn" value="5">더 보기</button>
+				
+			</div>
+		</div>
+		<#else>
+		<div class="row">
+			<div class="col-md-2"></div>
+			<div class="col-md-8" id="posts">
+				<h1 class="my-4"></h1>
+			</div>
+			
+			
+		</div>
 		
+		<div class="text-center">
+				
+				<button type="button" class="btn btn-primary" id ="postAllMoreBtn" value="1">더 보기</button>
+						
+		</div>
+		</#if>
+
 	</div>
-	
+
 	<#include "footer.ftl">
 
 	<div class="modal fade" id="create_post_modal" tabindex="-1"
@@ -83,8 +96,8 @@ body {
 				<div class="modal-body">
 					<form>
 						<div class="form-group">
-							<label for="create_title_text">Title</label>
-							<input type="text" class="form-control" id="create_title_text" placeholder="Title">
+							<label for="create_title_text">Title</label> <input type="text"
+								class="form-control" id="create_title_text" placeholder="Title">
 						</div>
 						<div class="form-group">
 							<label for="create_content_text">Content</label>
@@ -95,7 +108,8 @@ body {
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
 						data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary" id="save_post_btn">Save Post</button>
+					<button type="button" class="btn btn-primary" id="save_post_btn">Save
+						Post</button>
 				</div>
 			</div>
 		</div>
