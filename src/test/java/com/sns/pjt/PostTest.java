@@ -82,7 +82,6 @@ public class PostTest {
 	 */
 
 	@Test
-	@Ignore
 	public void testInsertPost() {
 
 		Post post = new Post();
@@ -107,6 +106,7 @@ public class PostTest {
 	}
 
 	@Test
+	@Ignore
 	public void testPostList() {
 
 		Pageable paging = PageRequest.of(0, 5, Sort.Direction.DESC, "id");

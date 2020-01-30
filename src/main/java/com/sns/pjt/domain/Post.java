@@ -50,6 +50,9 @@ public class Post {
 	
 	@Transient
 	private boolean pageCheck = false; 
+	
+	@Transient
+	private int views ;
 
 	@ManyToOne
 	// @JsonBackReference

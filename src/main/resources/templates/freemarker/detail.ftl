@@ -21,6 +21,12 @@
           padding-top: 56px;
         }
       }
+      
+  
+      #views { 
+      	text-align: right; 
+      }
+      
     </style>
   </head>
 
@@ -38,6 +44,8 @@
 
           <p class="lead">
             by <span id="detail_user"></span>
+          
+   				<label id ="views"> view : ${viewCount }</label>
           </p>
 
           <hr>

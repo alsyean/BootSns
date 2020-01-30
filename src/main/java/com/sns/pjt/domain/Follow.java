@@ -30,7 +30,7 @@ public class Follow {
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ", timezone = "Asia/Seoul")
 	@Temporal(value = TemporalType.TIMESTAMP)
-	@Column(insertable = false, updatable = false, columnDefinition = "datetime default CURRENT_TIMESTAMP")
+	@Column(updatable = false, columnDefinition = "datetime default CURRENT_TIMESTAMP")
 	private Date createdAt;
 	
 	public Follow(int followerId,int followeeId,Date createdAt) {

@@ -14,19 +14,21 @@ $(document).ready(function(){
         console.log("getPost date : " +data.data);
     	$.each(data.data, function(index, e) {
 
-    		console.log("data : " + e.pageCheck);
+    		console.log("views : " + e.views);
     		
 	 	       if(e.pageCheck){
 	 	    	   $('#postAllMoreBtn').remove();
 	 	       }
 	 	       
     		$('#posts').append(
-    				'<div class="card mb-4"> <div class="card-body"> <h2 class="card-title">' + e.title 
+    				'<div class="card mb-4"> <div class="card-body">' 
+    				+ '<h2 class="card-title">' + e.title 
     				+ '</h2> <p class="card-text">' + e.content 
     				+ '</p> <a href="/post/detail/' + e.id 
     				+ '" class="btn btn-primary">Read More &rarr;</a> </div> ' 
     				+ '<div class="card-footer text-muted"> Posted on ' + e.createdAt.split('T')[0]
     				+ ' by ' + e.user.username + getFollowInfo(e.user)
+    				+ "<label style='text-align : right;'>   &nbsp;   views :" + e.views + '</label>'
     				+ '</div> </div>');
     	});
        console.log("getPost date : " +data);
@@ -70,6 +72,7 @@ $(document).ready(function(){
 	    				+ '" class="btn btn-primary">Read More &rarr;</a> </div> ' 
 	    				+ '<div class="card-footer text-muted"> Posted on ' + e.createdAt.split('T')[0]
 	    				+ ' by ' + e.user.username + getFollowInfo(e.user)
+	    				+ "<label style='text-align : right;'>   &nbsp;   views :" + e.views + '</label>'
 	    				+ '</div> </div>');
 	    	});
 	       console.log(data);
@@ -194,6 +197,7 @@ $(document).ready(function(){
 	    				+ '" class="btn btn-primary">Read More &rarr;</a> </div> ' 
 	    				+ '<div class="card-footer text-muted"> Posted on ' + e.createdAt.split('T')[0]
 	    				+ ' by ' + e.user.username + getFollowInfo(e.user)
+	    				+ "<label style='text-align : right;'>   &nbsp;   views :" + e.views + '</label>'
 	    				+ '</div> </div>');
 	    	});
 	       console.log("getPost date : " +data);
@@ -233,6 +237,7 @@ $(document).ready(function(){
 	    				+ '" class="btn btn-primary">Read More &rarr;</a> </div> ' 
 	    				+ '<div class="card-footer text-muted"> Posted on ' + e.createdAt.split('T')[0]
 	    				+ ' by ' + e.user.username + getFollowInfo(e.user)
+	    				+ "<label style='text-align : right;'>   &nbsp;   views :" + e.views + '</label>'
 	    				+ '</div> </div>');
 	    	});
 	       console.log("getPost date : " +data);

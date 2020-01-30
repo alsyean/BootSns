@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.sns.pjt.Service.PostService;
+import com.sns.pjt.Service.RedisPostService;
 
 @Controller
 public class PostController {
@@ -21,10 +22,14 @@ public class PostController {
 	@Autowired
 	private PostService postService;
 
+	@Autowired
+	private RedisPostService redisPostService;
+
 	@GetMapping(value = "/post/detail/{postId}")
 	public String detail(@PathVariable int postId, Model model, HttpSession session) {
 
 		model.addAttribute("id", postId);
+		model.addAttribute("viewCount", redisPostService.viewCount(postId));
 
 		return "detail";
 	}

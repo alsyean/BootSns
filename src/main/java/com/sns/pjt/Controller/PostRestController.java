@@ -59,6 +59,7 @@ public class PostRestController {
 
 			resultDto = new ResultDto(200, "Succeess", postList);
 			
+			
 			logger.info("postList : " + postList);
 
 		} catch (Exception e) {
