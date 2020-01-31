@@ -63,7 +63,6 @@ public class PostServiceImpl implements PostService {
 		return insert;
 	}
 
-	@CacheEvict(value ="post", key="#postId", cacheManager="cacheManager")
 	@Override
 	public List<Post> getFollowPost(HttpSession session, int feedPage) {
 
@@ -201,7 +200,17 @@ public class PostServiceImpl implements PostService {
 
 					Post post = postIterator.next();
 					postList.set(postList.indexOf(post), post).setPageCheck(true);
+					int views = redisPostService.views(post.getId());
+					post.setViews(views);
 
+				}
+			}else if(!nextPostList.isEmpty()) {
+				while (postIterator.hasNext()) {
+
+					Post post = postIterator.next();
+					int views = redisPostService.views(post.getId());
+					post.setViews(views);
+				
 				}
 			}
 

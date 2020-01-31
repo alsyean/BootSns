@@ -1,5 +1,7 @@
 package com.sns.pjt.Service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -25,18 +27,32 @@ public class RedisPostServiceImpl implements RedisPostService {
 		// TODO Auto-generated method stub
 		HashOperations<String, String, String> hashOperation = redisTemplate.opsForHash();
 
-		int cnt;
+		int views;
 
 		hashOperation.increment("post:" + postId, "viewCnt", 1);
 
-		cnt = Integer.valueOf((hashOperation.get("post:" + postId, "viewCnt")));
+		views = this.views(postId);
 
-		return cnt;
+		return views;
 	}
-
+	
+	
 	@Override
 	public int views(int postId) {
 		// TODO Auto-generated method stub
+		HashOperations<String, String, String> hashOperation = redisTemplate.opsForHash();
+
+		int views = 0;
+
+		views = this.cacheView(postId);
+
+		return views;
+	}
+	
+	@Cacheable(value ="post", key="#postId", cacheManager="cacheManager")
+	@Transactional
+	@Override
+	public int cacheView(int postId) {
 		HashOperations<String, String, String> hashOperation = redisTemplate.opsForHash();
 
 		int views = 0;
@@ -62,6 +78,6 @@ public class RedisPostServiceImpl implements RedisPostService {
 		
 		redisPostRepository.deleteById(postId);
 		
-	}
+	}	
 
 }
