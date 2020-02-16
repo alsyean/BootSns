@@ -15,10 +15,11 @@ $(document).ready(function(){
 	
         url: "/postAll/" + AllPostPage
     }).then(function(data) {
-        console.log("getPost date : " +JSON.stringify(data.data));
-    	$.each(data.data, function(index, e) {
+    	if(data.data.length == 0){
 
-    		console.log("views : " + e.views);
+    		$('#postAllMoreBtn').hide();
+        }
+    	$.each(data.data, function(index, e) {
     		
 	 	       if(e.pageCheck){
 	 	    	   $('#postAllMoreBtn').remove();
@@ -40,7 +41,6 @@ $(document).ready(function(){
     });
 	
 	function getFollowInfo(user) {
-		console.log("getFollowInfo : " + user.id);
 		if(user.isFollow) {
 			return ' <span class="unfollow" value="' + user.id + '" style="color:blue; cursor: pointer;"> Unfollow </span>';	
 		} else if(user.isFollow == null){
@@ -59,10 +59,9 @@ $(document).ready(function(){
 	        },
 	        url: "/post/feed/0"
 	    }).then(function(data) {
-
-		    console.log("postFeed" + data.data);
-		    
-	    	console.log("token : " + token);
+	        if(data.data.length == 0){
+	    		$('#postFeedMoreBtn').hide();
+	        }
 	    	$.each(data.data, function(index, e) {
 	    		  if(e.pageCheck){
 		 	    	   $('#postFeedMoreBtn').remove();
@@ -123,9 +122,7 @@ $(document).ready(function(){
 		
 		var param = {
 			followeeId: userId
-		}
-		console.log("follow param : " + userId);
-		
+		}		
 		
 		$.ajax({
 			beforeSend: function(xhr){
@@ -214,13 +211,12 @@ $(document).ready(function(){
 		
 		feedPage  =  feedPage + parseInt(postMore) ;
 		
-		console.log(feedPage);
-		
 		$.ajax({
 			
 	        url: "/post/feed/" + feedPage
 	    }).then(function(data) {
-	        console.log("getPost date : " +data.data);
+
+	        console.log("getPost date : " +data.data.length);
 	    	$.each(data.data, function(index, e) {
 
 	 	       console.log("getPost : " + e.pageCheck);
@@ -239,8 +235,6 @@ $(document).ready(function(){
 	    				+ "<label style='text-align : right;'>   &nbsp;   views :" + e.views + '</label>'
 	    				+ '</div> </div>');
 	    	});
-	       console.log("getPost date : " +data);
-	       console.log("e.user : "+e.user);
 	    }, function(err) {
 	    	console.log(err.responseJSON);
 	    });

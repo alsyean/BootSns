@@ -138,7 +138,7 @@ public class PostRestController {
 		try {
 
 			int del = postService.deletePost(postId, session);
-
+			
 			if (del > 0) {
 				resultDto = new ResultDto(200, "Success", null);
 			}

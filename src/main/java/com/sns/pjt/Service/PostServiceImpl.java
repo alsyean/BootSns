@@ -317,7 +317,7 @@ public class PostServiceImpl implements PostService {
 			if (userId.equals(user.getId())) {
 				Post post = postRepository.findById(postId);
 
-//				del = postRepository.deletePost(post.getId());
+				del = postRepository.deletePost(post.getId());
 //				redisPostService.deletePost(post.getId());
 			}
 
