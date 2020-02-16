@@ -90,12 +90,16 @@ body {
             <div class="row">
                 <div class="col-md-6 login-form-1">
                     <h3>Sign Up</h3>
-                    <form>
+                     <form>
                         <div class="form-group">
-                            <input type="text" id="signup_username" class="form-control" placeholder="Username *" value="" />
+                            <input type="text" id="signup_username" class="form-control" placeholder="UserId *" value="" />
+                            <span class="btn btn-primary overlap">중복 체크</span>
                         </div>
                         <div class="form-group">
                             <input type="password" id="signup_password" class="form-control" placeholder="Password *" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="signup_email" class="form-control" placeholder="email *" value="" />
                         </div>
                         <div class="form-group">
                             <input type="submit" id="signup_btn" class="btnSubmit" value="Signup" />

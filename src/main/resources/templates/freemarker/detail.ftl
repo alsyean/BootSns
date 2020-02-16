@@ -42,21 +42,23 @@
 
           <h1 class="mt-4" id="detail_title"></h1>
 
-          <p class="lead">
-            by <span id="detail_user"></span>
-          
-   				<label id ="views"> view : ${viewCount }</label>
-          </p>
+       
 
           <hr>
 
           <p>Posted on <span id="detail_date"></span></p>
-
+  			<p class="lead">
+            	by <span id="detail_user"></span>
+          
+   					<label id ="views"> view : ${viewCount }</label>
+          	</p>
           <hr>
 
           <div id="detail_content" class="my-5">
           </div>
+          <input type="hidden" value = ${write?then('Y', 'N')}>
           
+          <#if write>
           <hr>
           <div class="btn btnBD">
 	          <button class="btn btn-primary" data-toggle="modal"
@@ -64,6 +66,7 @@
 	          <button class="btn btn-danger" id="detail_delete_btn">Delete</button>
           </div>
           <hr>
+          </#if>
           
           <div class="card my-4">
             <h5 class="card-header">Leave a Comment:</h5>
@@ -71,6 +74,9 @@
               <form>
               	<div class="form-group">
 					<input type="text" class="form-control" id="comment_user_text" placeholder="Username">
+				</div>
+				<div class="form-group">
+					<input type="password" class="form-control" id="comment_password_text" placeholder="password">
 				</div>
                 <div class="form-group">
                   <textarea class="form-control" rows="3" id="comment_text"></textarea>

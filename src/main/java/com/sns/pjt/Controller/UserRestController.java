@@ -1,7 +1,6 @@
 package com.sns.pjt.Controller;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -39,7 +38,12 @@ public class UserRestController {
 			User result = userService.insertUser(user);
 
 			if (result != null) {
-				resultDto = new ResultDto(200, "Success", result);
+						;
+				Boolean sendEmail = userService.insertEmail(user);
+				
+				if(sendEmail) {
+					resultDto = new ResultDto(200, "Success", result);
+				}
 			}
 
 		} catch (Exception e) {
@@ -59,23 +63,32 @@ public class UserRestController {
 		logger.info("User : " + user.toString());
 
 		try {
-			User result = userService.getUserInfoByUsernameAndPassword(user);
-
-			logger.info("result : " + result.toString());
 			
-			if (result.getUsername().equals(user.getUsername()) && result.getPassword().equals(user.getPassword())) {
+			Boolean role = userService.roleCheck(user);
+			
+			if(role) {
+				User result = userService.getUserInfoByUsernameAndPassword(user);
 				
-				Token token = userService.insertToken(result,session);
-				
-				logger.info("token : " + token.toString());
-				
-				resultDto = new ResultDto(200, "Success", token);
+				if (result.getUsername().equals(user.getUsername()) && result.getPassword().equals(user.getPassword())) {
+					
+					Token token = userService.insertToken(result,session);
+					
+					logger.info("token : " + token.toString());
+					
+					resultDto = new ResultDto(200, "Success", token);
+				}	
+			}else if(!role){
+				resultDto = new ResultDto(403, "Fail", null);
+			}else {
+				resultDto = new ResultDto(400, "Fail", null);
 			}
-
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
+		logger.info(resultDto.toString());
+		
 		return resultDto;
 	}
 
@@ -99,6 +112,26 @@ public class UserRestController {
 
 		return resultDto;
 
+	}
+	
+	@PostMapping(value = "/user/overlap", produces = "application/json; charset=utf-8")
+	public ResultDto overlapUserName(@RequestBody User dto) {		
+		
+		logger.info("overLap");
+		
+		ResultDto result = new ResultDto(200,"Success", null);
+		
+		Boolean overlap = userService.overlapUserName(dto);
+		
+		if(overlap) {
+			result = new ResultDto(200,"Success", overlap);
+		}else if(!overlap) {
+			result = new ResultDto(200,"Success", overlap);
+		}
+		
+		System.out.println(result);
+		
+		return result;
 	}
 
 }

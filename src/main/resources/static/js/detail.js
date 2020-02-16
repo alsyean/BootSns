@@ -1,4 +1,5 @@
 $(document).ready(function(){
+	
 	var postId = $('#detail_post_id').attr("value");
 	postId = postId.replace(/,/g, "");
 	console.log("postId - " + postId);
@@ -15,19 +16,24 @@ $(document).ready(function(){
     	console.log(err.responseJSON);
     });
 	
-//	$.ajax({
-//        url: "/comments?post_id="+postId
-//    }).then(function(data) {
-//    	$.each(data, function(index, e) {
-//    		$('#comments').append(
-//    				'<div class="media mb-4"><div class="media-body"><h5 class="mt-0">' + e.user
-//    				+ '</h5>' + e.comment 
-//    	            + '</div></div>');
-//    	});
-//       console.log(data);
-//    }, function(err) {
-//    	console.log(err.responseJSON);
-//    });
+	$.ajax({
+        url: "/comments?post_id="+postId
+    }).then(function(data) {
+    	console.log(data.data);
+    	$.each(data.data, function(index, e) {
+    		$('#comments').append(
+    				'<h5 class="card-header"> writer : <span id ="comment_user" value = ' + e.user + '>' + e.user +'</span>'
+    				+ '<button type="submit" class="btn btn-danger" id="delete_comment_btn" style="float:right;" data-user = ' + e.user
+    				+ '>Delete</button>'+ '</h5>'
+    				+ '<input type="password" class="form-control" id="comment_password" placeholder="password">'
+    				+ '<div class="card-body">' 
+    				+ '</h5> ' + e.comment  +'</h5>' 
+    	            + '</div></div>');
+    	});
+       console.log(data);
+    }, function(err) {
+    	console.log(err.responseJSON);
+    });
 	
 	$('.btnBD').click(function(){
 		$.ajax({
@@ -91,27 +97,70 @@ $(document).ready(function(){
 		var postId = $('#detail_post_id').attr("value");
 		var user = $('#comment_user_text').val();
 		var comment = $('#comment_text').val();
+		var replyPassword = $('#comment_password_text').val();
 		
 		console.log(postId);
 		console.log(user);
 		console.log(comment);
 		
+		if(!replyPassword){
+			alert('비밀번호를 입력해주세요 ')
+			return ;
+		}
+		
 		var param = {
 				postId: postId,
+				replyPassword : replyPassword,
 				user: user,
 				comment: comment
 		}
 		
+		console.log(param);
+		
 		$.ajax({
-	        url: "/comment",
+			url: '/comment',
 	        method: "POST",
 	        dataType: 'json',
             contentType: 'application/json',
             data: JSON.stringify(param)
 	    }).then(function(data) {
-	    	window.location.href = '/page/detail/'+postId;
+	    	window.location.href = '/post/detail/'+postId;
 	    }, function(err) {
 	    	alert(err.responseJSON);
 	    });
 	});
+	
+	
+	$(document).on('click','#delete_comment_btn',function(){
+	
+		var postId = $('#detail_post_id').attr("value");
+		var replyPassword = $('#comment_password').val();
+		var user = $(this).data("user");
+
+		console.log(replyPassword);
+		var param = {
+				postId: postId,
+				replyPassword : replyPassword,
+				user : user
+		}
+		$.ajax({
+			url: '/comment/delete',
+	        method: "POST",
+	        dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify(param)
+	    }).then(function(data) {
+	    	if(data.code == 200){
+	    		alert('삭제 되었습니다.')
+	    	}else{
+	    		alert('실패 했습니다.')
+	    	}
+	    	
+	    	window.location.href = '/post/detail/'+postId;
+	    }, function(err) {
+	    	alert(err.responseJSON);
+	    });
+		
+	});
+	
 });

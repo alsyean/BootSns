@@ -1,5 +1,7 @@
 package com.sns.pjt.Controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -8,14 +10,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.sns.pjt.Service.PostService;
 import com.sns.pjt.Service.UserService;
+import com.sns.pjt.domain.Post;
 
 @Controller
 public class UserController {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
+	@Autowired
+	private UserService userService;
+
+
+	@Autowired
+	private PostService postService;
+	
 	@GetMapping(value = "/")
 	public String index(Model model, HttpSession session) {
 
@@ -27,6 +39,17 @@ public class UserController {
 
 			model.addAttribute("userId", sessionCheck);
 		}
+		
+//		List<Post> postList = postService.getPostList(session, 0);
+//		List<Post> followList = postService.getFollowPost(session, 0);
+//		
+//		int postListSize = postList.size();
+//		int followListSize = followList.size();
+//		
+//		if(postListSize == 0 || followListSize == 0) {
+//			model.addAttribute("postList", postListSize);
+//			model.addAttribute("followList", followListSize);
+//		}
 
 		return "index";
 	}
@@ -56,5 +79,20 @@ public class UserController {
 		}
 
 		return "login";
+	}
+	
+	@GetMapping(value = "/verify")
+	public String signSuccess(@RequestParam String email, @RequestParam String username) {
+		logger.info("이메일 인증 기능 처리");
+	
+		String page = "redirect:login";
+		
+		Boolean getAdmin = userService.insertIsAdmin(email, username);
+	
+		if(getAdmin == null) {
+			page = "redirect:signup";
+		}
+		
+		return page;
 	}
 }

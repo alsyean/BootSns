@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
+import com.sns.pjt.util.Role;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -44,6 +45,10 @@ public class User {
 	@Temporal(value = TemporalType.TIMESTAMP)
 	@Column( updatable = false, columnDefinition = "datetime default CURRENT_TIMESTAMP")
 	private Date createdAt;
+	 
+	private String email;
+	
+	private Role isAdmin;
 	
 	@Transient
 	private Boolean isFollow;

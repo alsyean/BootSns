@@ -11,21 +11,15 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.sns.pjt.Controller.PostRestController;
-import com.sns.pjt.Controller.dto.PostDto;
 import com.sns.pjt.domain.Follow;
 import com.sns.pjt.domain.Post;
-import com.sns.pjt.domain.RedisPost;
 import com.sns.pjt.domain.User;
 import com.sns.pjt.persistence.PostRepository;
-import com.sns.pjt.persistence.RedisPostRepository;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -41,8 +35,8 @@ public class PostServiceImpl implements PostService {
 	@Autowired
 	private FollowService followService;
 
-	@Autowired
-	private RedisPostService redisPostService;
+//	@Autowired
+//	private RedisPostService redisPostService;
 
 	@Override
 	public Post insertPost(Post post, HttpSession session) {
@@ -53,12 +47,13 @@ public class PostServiceImpl implements PostService {
 		post.setCreatedAt(new Date());
 
 		post.setUser(user);
-
+		post.setViews(0);
+		
 		Post insert = postRepository.save(post);
 
 		Post getPostById = postRepository.findById(insert.getId());
 
-		redisPostService.insertPost(getPostById);
+//		redisPostService.insertPost(getPostById);
 
 		return insert;
 	}
@@ -82,13 +77,9 @@ public class PostServiceImpl implements PostService {
 				Post post = postIterator.next();
 				Object uId = post.getUser().getId();
 
-				int views = redisPostService.views(post.getId());
-				
-				logger.info("views : " +Integer.toString(views));
+//				int views = redisPostService.views(post.getId());
+//				post.setViews(views);
 
-				post.setViews(views);
-
-				logger.info("postId : " + post);
 
 				for (int i = 0; i < follow.size(); i++) {
 
@@ -126,8 +117,8 @@ public class PostServiceImpl implements PostService {
 				Object uId = post.getUser().getId();
 				
 
-				int views = redisPostService.views(post.getId());
-				post.setViews(views);
+//				int views = redisPostService.views(post.getId());
+//				post.setViews(views);
 
 				if (!uId.equals(userId)) {
 					postIterator.remove();
@@ -200,16 +191,16 @@ public class PostServiceImpl implements PostService {
 
 					Post post = postIterator.next();
 					postList.set(postList.indexOf(post), post).setPageCheck(true);
-					int views = redisPostService.views(post.getId());
-					post.setViews(views);
+//					int views = redisPostService.views(post.getId());
+//					post.setViews(views);
 
 				}
 			}else if(!nextPostList.isEmpty()) {
 				while (postIterator.hasNext()) {
 
 					Post post = postIterator.next();
-					int views = redisPostService.views(post.getId());
-					post.setViews(views);
+//					int views = redisPostService.views(post.getId());
+//					post.setViews(views);
 				
 				}
 			}
@@ -230,8 +221,8 @@ public class PostServiceImpl implements PostService {
 					Post post = postIterator.next();
 					Object uId = post.getUser().getId();
 					
-					int views = redisPostService.views(post.getId());
-					post.setViews(views);
+//					int views = redisPostService.views(post.getId());
+//					post.setViews(views);
 
 					for (int i = 0; i < follow.size(); i++) {
 
@@ -263,8 +254,8 @@ public class PostServiceImpl implements PostService {
 					Object uId = post.getUser().getId();
 					
 
-					int views = redisPostService.views(post.getId());
-					post.setViews(views);
+//					int views = redisPostService.views(post.getId());
+//					post.setViews(views);
 
 					if (!uId.equals(userId)) {
 						postList.set(postList.indexOf(post), post).getUser().setIsFollow(false);
@@ -307,7 +298,9 @@ public class PostServiceImpl implements PostService {
 	public Post detail(int postId) {
 
 		Post detail = postRepository.findById(postId);
-
+		detail.setViews(detail.getViews() + 1);
+		postRepository.save(detail);
+		
 		return detail;
 	}
 
@@ -324,8 +317,8 @@ public class PostServiceImpl implements PostService {
 			if (userId.equals(user.getId())) {
 				Post post = postRepository.findById(postId);
 
-				del = postRepository.deletePost(post.getId());
-				redisPostService.deletePost(post.getId());
+//				del = postRepository.deletePost(post.getId());
+//				redisPostService.deletePost(post.getId());
 			}
 
 		} catch (Exception e) {
@@ -333,6 +326,14 @@ public class PostServiceImpl implements PostService {
 		}
 
 		return del;
+	}
+	
+	@Override
+	public Post writeCheck(int postId) {
+		
+		Post write = postRepository.findById(postId); 
+		
+		return write;
 	}
 
 }

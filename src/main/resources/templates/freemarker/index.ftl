@@ -52,11 +52,11 @@ body {
 			<div class="container tab-pane fade col-md-8" id="posts" >
 				<h1 class="my-4"></h1>
 			</div>
-			<div class="text-center">
+			<div class="text-center" id="btn">
 
-				<button type="button" class="btn btn-light" id ="postAllMoreBtn" value="1">더 보기</button>
+				<!-- <button type="button" class="btn btn-light" id ="postAllMoreBtn" value="1">더 보기</button>
 
-				<button type="button" class="btn btn-outline-dark" id="postFeedMoreBtn" value="5">더 보기</button>
+				<button type="button" class="btn btn-outline-dark" id="postFeedMoreBtn" value="5">더 보기</button> -->
 				
 			</div>
 		</div>

@@ -12,13 +12,20 @@ import com.sns.pjt.domain.User;
 @Service
 public interface UserService {
 
-	
 	public User insertUser(User user);
-	
+
 	public User getUserById(int id);
-	
-	 User getUserInfoByUsernameAndPassword(User user); 
-	
-	 public Token insertToken(User user, HttpSession session); 
-	
+
+	public User getUserInfoByUsernameAndPassword(User user);
+
+	public Token insertToken(User user, HttpSession session);
+
+	public Boolean overlapUserName(User user);
+
+	Boolean insertEmail(User user) throws Exception;
+
+	Boolean insertIsAdmin(String email, String username);
+
+	public Boolean roleCheck(User user);
+
 }

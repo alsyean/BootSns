@@ -1,4 +1,8 @@
 $(document).ready(function(){
+	
+	$('.text-center#btn').append('<button type="button" class="btn btn-light" id ="postAllMoreBtn" value="1">더 보기</button>');
+
+	$('.text-center#btn').append('<button type="button" class="btn btn-outline-dark" id="postFeedMoreBtn" value="5">더 보기</button>');
 
 	let AllPostPage = 0;
 	
@@ -11,7 +15,7 @@ $(document).ready(function(){
 	
         url: "/postAll/" + AllPostPage
     }).then(function(data) {
-        console.log("getPost date : " +data.data);
+        console.log("getPost date : " +JSON.stringify(data.data));
     	$.each(data.data, function(index, e) {
 
     		console.log("views : " + e.views);
@@ -31,8 +35,6 @@ $(document).ready(function(){
     				+ "<label style='text-align : right;'>   &nbsp;   views :" + e.views + '</label>'
     				+ '</div> </div>');
     	});
-       console.log("getPost date : " +data);
-       console.log("e.user : "+e.user);
     }, function(err) {
     	console.log(err.responseJSON);
     });
@@ -75,7 +77,6 @@ $(document).ready(function(){
 	    				+ "<label style='text-align : right;'>   &nbsp;   views :" + e.views + '</label>'
 	    				+ '</div> </div>');
 	    	});
-	       console.log(data);
 	    }, function(err) {
 	    	console.log(err.responseJSON);
 	    });
@@ -200,8 +201,6 @@ $(document).ready(function(){
 	    				+ "<label style='text-align : right;'>   &nbsp;   views :" + e.views + '</label>'
 	    				+ '</div> </div>');
 	    	});
-	       console.log("getPost date : " +data);
-	       console.log("e.user : "+e.user);
 	    }, function(err) {
 	    	console.log(err.responseJSON);
 	    });

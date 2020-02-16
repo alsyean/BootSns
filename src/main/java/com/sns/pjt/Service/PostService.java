@@ -26,4 +26,6 @@ public interface PostService {
 	public Post detail(int postId);
 
 	public int deletePost(int postId, HttpSession session) throws Exception;
+	
+	public Post writeCheck(int postId);
 }

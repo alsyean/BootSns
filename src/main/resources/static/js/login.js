@@ -25,9 +25,19 @@ $(document).ready(function() {
 			contentType : 'application/json',
 			data : JSON.stringify(param)
 		}).then(function(data) {
-			document.cookie = "accesstoken=" + data.data.token;
-			document.cookie = "userId=" + data.data.userId;
-			console.log(data.data.userId);
+			
+			console.log(data);
+			
+			if(data.code == 403){
+				alert("이메일 인증을 확인 해주세요 ");
+				window.location.reload();
+			}else if(data.data == null){
+				alert("계정 정보를 확인해주세요.");
+				window.location.href = '/signup';
+			}else{
+				document.cookie = "accesstoken=" + data.data.token;
+				document.cookie = "userId=" + data.data.userId;
+			}
 
 			window.location.href = '/';
 		}, function(err) {
