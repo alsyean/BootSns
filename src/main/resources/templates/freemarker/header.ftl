@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 	<div class="container">
-		<a class="navbar-brand" href="/">Code Presso SNS</a>
+		<a class="navbar-brand" href="/">My Diary</a>
 		<#if Session.userId??>
 		<div class="row">
 			<button class="btn btn-secondary mx-3" id="create_btn" data-toggle="modal"

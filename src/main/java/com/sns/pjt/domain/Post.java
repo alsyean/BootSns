@@ -1,5 +1,6 @@
 package com.sns.pjt.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.CollectionTable;
@@ -34,7 +35,7 @@ import lombok.ToString;
 @Setter
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @Entity
-public class Post {
+public class Post implements Comparable<Post> , Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,6 +68,12 @@ public class Post {
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+	}
+
+	@Override
+	public int compareTo(Post o) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }
