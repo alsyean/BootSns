@@ -3,6 +3,7 @@ Spring Boot를 이용한 Simple SNS
 
 ### 작품 개요
 Spring Boot를 이용한 간단한 SNS
+* * *
 
 ### 개발 환경
 * JDK 1.8
@@ -10,6 +11,7 @@ Spring Boot를 이용한 간단한 SNS
 * JPA
 * MySQL 8.0
 * Freemarker
+* * *
 
 ### 스토리
 * 회원 가입 
