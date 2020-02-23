@@ -22,9 +22,6 @@ public class PostController {
 	@Autowired
 	private PostService postService;
 
-//	@Autowired
-//	private RedisPostService redisPostService;
-
 	@GetMapping(value = "/post/detail/{postId}")
 	public String detail(@PathVariable int postId, Model model, HttpSession session) {
 
@@ -44,7 +41,6 @@ public class PostController {
 		
 		model.addAttribute("id", postId);
 		model.addAttribute("viewCount", postWrite.getViews() + 1);
-//		model.addAttribute("viewCount", redisPostService.viewCount(postId));
 
 		return "detail";
 	}

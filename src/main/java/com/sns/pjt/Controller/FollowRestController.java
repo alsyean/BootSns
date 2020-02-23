@@ -20,8 +20,9 @@ public class FollowRestController {
 	private static final Logger logger = LoggerFactory.getLogger(FollowRestController.class);
 
 	@Autowired
-	FollowService followService;
+	private FollowService followService;
 
+	//팔로우
 	@PostMapping(value = "/follow", produces = "application/json; charset=utf-8")
 	public ResultDto follow(@RequestBody Follow follow, HttpSession session) throws Exception {
 
@@ -42,7 +43,8 @@ public class FollowRestController {
 
 		return resultDto;
 	}
-
+	
+	//팔로우 해체
 	@DeleteMapping(value = "/follow", produces = "application/json; charset=utf-8")
 	public ResultDto unFollow(@RequestBody Follow follow, HttpSession session) throws Exception {
 

@@ -30,6 +30,7 @@ public class PostRestController {
 	@Autowired
 	private PostService postService;
 
+	//글 등록
 	@PostMapping(value = "/post", produces = "application/json; charset=utf-8")
 	public ResultDto insertPost(@RequestBody Post post, HttpSession session) throws Exception {
 
@@ -46,6 +47,7 @@ public class PostRestController {
 		return resultDto;
 	}
 
+	//전체 글 5개씩 가져오기
 	@GetMapping(value = "/postAll/{AllPostPage}", produces = "application/json; charset=utf-8")
 	public ResultDto getPostList(@PathVariable("AllPostPage") int AllPostPage, HttpSession session) throws Exception {
 
@@ -69,6 +71,7 @@ public class PostRestController {
 		return resultDto;
 	}
 
+	//팔로우한 글 5개 씩 가져오기
 	@GetMapping(value = "/post/feed/{feedPage}", produces = "application/json; charset=utf-8")
 	public ResultDto getPostFeedList(@PathVariable("feedPage")int feedPage,HttpSession session) throws Exception {
 
@@ -89,6 +92,7 @@ public class PostRestController {
 		return resultDto;
 	}
 
+	//글 상세보기
 	@GetMapping(value = "/post/{postId}")
 	public ResultDto detailPost(@PathVariable("postId") int postId) throws Exception {
 
@@ -111,6 +115,7 @@ public class PostRestController {
 		return resultDto;
 	}
 
+	//글 수정 
 	@PutMapping(value = "/post", produces = "application/json; charset=utf-8")
 	public ResultDto updatePost(@RequestBody Post post, HttpSession session) throws Exception {
 
@@ -130,6 +135,7 @@ public class PostRestController {
 		return resultDto;
 	}
 
+	// 글 삭제
 	@DeleteMapping(value = "/post/{postId}", produces = "application/json; charset=utf-8")
 	public ResultDto deletePost(@PathVariable("postId") int postId, HttpSession session) throws Exception {
 

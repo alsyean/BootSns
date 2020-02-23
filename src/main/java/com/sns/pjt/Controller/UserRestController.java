@@ -54,7 +54,6 @@ public class UserRestController {
 	} 
 
 	// 로그인 기능
-
 	@PostMapping(value = "/auth", produces = "application/json; charset=utf-8")
 	public ResultDto userLogin(@RequestBody User user, HttpSession session) throws Exception {
 
@@ -114,6 +113,7 @@ public class UserRestController {
 
 	}
 	
+	//유저 이름 중복 체크
 	@PostMapping(value = "/user/overlap", produces = "application/json; charset=utf-8")
 	public ResultDto overlapUserName(@RequestBody User dto) {		
 		

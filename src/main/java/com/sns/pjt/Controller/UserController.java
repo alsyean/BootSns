@@ -28,6 +28,7 @@ public class UserController {
 	@Autowired
 	private PostService postService;
 	
+	//메인 페이지
 	@GetMapping(value = "/")
 	public String index(Model model, HttpSession session) {
 
@@ -40,17 +41,6 @@ public class UserController {
 			model.addAttribute("userId", sessionCheck);
 		}
 		
-//		List<Post> postList = postService.getPostList(session, 0);
-//		List<Post> followList = postService.getFollowPost(session, 0);
-//		
-//		int postListSize = postList.size();
-//		int followListSize = followList.size();
-//		
-//		if(postListSize == 0 || followListSize == 0) {
-//			model.addAttribute("postList", postListSize);
-//			model.addAttribute("followList", followListSize);
-//		}
-
 		return "index";
 	}
 
@@ -81,6 +71,7 @@ public class UserController {
 		return "login";
 	}
 	
+	//이메일 인증
 	@GetMapping(value = "/verify")
 	public String signSuccess(@RequestParam String email, @RequestParam String username) {
 		logger.info("이메일 인증 기능 처리");

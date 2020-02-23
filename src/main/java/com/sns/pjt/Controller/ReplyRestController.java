@@ -24,6 +24,7 @@ public class ReplyRestController {
 	@Autowired
 	private ReplyService replyService;
 	
+	// 댓글 등록
 	@PostMapping(value ="/comment", produces = "application/json; charset=utf-8")
 	public ResultDto insertReply(@RequestBody Reply reply) throws Exception {
 		
@@ -43,6 +44,7 @@ public class ReplyRestController {
 		return resultDto;
 	}
 	
+	// 댓글 가져오기
 	@GetMapping(value = "/comments")
 	public ResultDto getPostList(@RequestParam(value = "post_id") int postId) throws Exception {
 		
@@ -61,7 +63,7 @@ public class ReplyRestController {
 		return resultDto;
 	}
 
-	
+	//댓글 삭제
 	@PostMapping(value ="/comment/delete", produces = "application/json; charset=utf-8")
 	public ResultDto deleteReply(@RequestBody Reply reply) throws Exception {
 		
