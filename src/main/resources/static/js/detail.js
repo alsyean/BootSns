@@ -1,10 +1,5 @@
 $(document).ready(function(){
 	
-	$('#header_logout_btn').click(function(){
-		document.cookie = "accesstoken=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-		window.location.href = '/logout';
-	});
-	
 	var postId = $('#detail_post_id').attr("value");
 	postId = postId.replace(/,/g, "");
 	console.log("postId - " + postId);
