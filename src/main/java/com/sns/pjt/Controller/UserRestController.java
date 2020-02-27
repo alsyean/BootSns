@@ -38,7 +38,7 @@ public class UserRestController {
 			User result = userService.insertUser(user);
 
 			if (result != null) {
-						;
+						
 				Boolean sendEmail = userService.insertEmail(user);
 				
 				if(sendEmail) {
