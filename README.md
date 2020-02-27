@@ -6,6 +6,8 @@ Spring Boot를 이용한 간단한 SNS
 * * *
 
 ### 개발 환경
+* Spring Boot
+* Eclipse
 * JDK 1.8
 * Maven 3
 * JPA
