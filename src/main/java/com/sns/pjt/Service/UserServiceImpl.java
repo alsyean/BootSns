@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
 
 			sendMail.setSubject("My Diary에 가입을 축하 드립니다.");
 			sendMail.setText(new StringBuffer().append("<h1>" + user.getUsername() + "님 가입을 축하드립니다.</h1>")
-					.append("저희 사이트에 가입해주셔서 감사합니다 앞으로 원활한 인증을 위해서 <a href='http://www.alsyean.com:8080/verify?email="
+					.append("저희 사이트에 가입해주셔서 감사합니다 앞으로 원활한 인증을 위해서 <a href='http://localhost:8080/verify?email="
 							+ user.getEmail())
 					.append("&username=" + user.getUsername() + "' target='_blenk'>여기를 눌러주세요</a>")
 					.append("<input type='hidden' value='" + user.getUsername()).append("'>").toString());
