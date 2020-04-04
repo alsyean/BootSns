@@ -15,7 +15,6 @@ Spring Boot를 이용한 간단한 SNS
 * Freemarker
 * * *
 
-
 ### 스토리
 * 회원 가입 
 * 이메일 인증
